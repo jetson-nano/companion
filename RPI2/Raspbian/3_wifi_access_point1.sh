@@ -64,7 +64,7 @@ cp init_wifi.py $WIFICONTROL_HOME/
 chmod +x $WIFICONTROL_HOME/init_wifi.py
 chmod +x $WIFICONTROL_HOME/startup_WifiServer.sh
 
-LINE="# sudo -H -u $NORMAL_USER /bin/bash -c '~$NORMAL_USER/start_wificontrol/startup_WifiServer.sh'"
+LINE="/bin/bash -c '~$NORMAL_USER/start_wificontrol/startup_WifiServer.sh'"
 perl -pe "s%^exit 0%$LINE\\n\\nexit 0%" -i /etc/rc.local
 
 systemctl disable networking
