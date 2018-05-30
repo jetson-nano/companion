@@ -10,7 +10,9 @@ fi
 set -e
 set -x
 
-pushd $HOME
+. config.env
+
+pushd /home/apsync
 
 pip install netifaces
 pip install eventlet flask flask_socketio redis
@@ -45,10 +47,6 @@ chmod +x /etc/hostapd/*.sh
 pushd tools
 cp *.service /lib/systemd/system
 
-pushd server
-cp -r * /home/apsync/start_wificontrol/
-
-
 sudo -u $NORMAL_USER -H bash <<'EOF'
 set -e
 set -x
@@ -58,11 +56,16 @@ WIFICONTROL_HOME=~/start_wificontrol
 if [ ! -d $WIFICONTROL_HOME ]; then
     mkdir $WIFICONTROL_HOME
 fi
-cp startup_wifiserver.sh $WIFICONTROL_HOME/
+cp startup_WifiServer.sh $WIFICONTROL_HOME/
 cp init_wifi.py $WIFICONTROL_HOME/
 
 chmod +x $WIFICONTROL_HOME/init_wifi.py
 chmod +x $WIFICONTROL_HOME/startup_WifiServer.sh
+
+pushd server
+cp -r * $WIFICONTROL_HOME/
+
+EOF
 
 LINE="/bin/bash -c '~$NORMAL_USER/start_wificontrol/startup_WifiServer.sh'"
 perl -pe "s%^exit 0%$LINE\\n\\nexit 0%" -i /etc/rc.local
