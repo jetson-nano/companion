@@ -58,15 +58,15 @@ sudo ./set-hostname   # reset the machine's hostname
 time sudo ./2_install_packages.sh || echo "Failed" # ~14m
 time sudo ./install_niceties || echo "Failed" # 1m
 sudo ./2_setup_uart.sh || echo "Failed"
-time sudo ./2_use_networkmanager.sh || echo "Failed" # ~1m
-sudo reboot # network goes screwy after nm installed
+#time sudo ./2_use_networkmanager.sh || echo "Failed" # ~1m
+#sudo reboot # network goes screwy after nm installed
 # log back in again as apsync/apsync
-ssh apsync@apsync
-pushd GitHub/companion/RPI2/Raspbian || echo "Failed"
-time sudo ./3_wifi_access_point.sh || echo "Failed" # Failure expected!
+#ssh apsync@apsync
+#pushd GitHub/companion/RPI2/Raspbian || echo "Failed"
+time sudo ./3_wifi_access_point1.sh || echo "Failed" # Failure expected!
 sudo reboot   # reboot required before AP will work
 # log back in again as apsync/apsync
-sudo nmcli connection up WiFiAP #  apparently required first time!
+#sudo nmcli connection up WiFiAP #  apparently required first time!
 pushd GitHub/companion/RPI2/Raspbian || echo "Failed"
 time sudo ./6_setup_cmavnode.sh || echo "Failed" # ~9m
 time sudo ./7_dflogger.sh || echo "Failed" # 13m
