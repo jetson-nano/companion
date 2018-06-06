@@ -10,10 +10,12 @@ set -x
 
 . config.env
 
-mv /etc/wpa_supplicant/wpa_supplicant.conf{,-unused}
+if [ -e /etc/wpa_supplicant/wpa_supplicant.conf ]; then
+    mv /etc/wpa_supplicant/wpa_supplicant.conf{,-unused}
+fi
 systemctl stop wpa_supplicant
 systemctl disable wpa_supplicant
-killall /sbin/wpa_supplicant
+killall /sbin/wpa_supplicant || true
 
 # most of this is common:
 ../../Common/Ubuntu/3_wifi_access_point.sh

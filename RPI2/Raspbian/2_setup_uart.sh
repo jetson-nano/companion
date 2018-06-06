@@ -13,6 +13,9 @@ set -x
 # enable uart (for RPi3, should do nothing on RPi and RPi1?)
 echo "enable_uart=1" >>/boot/config.txt
 
+# switch ttyAMA0 and ttyS0:
+echo "dtoverlay=pi3-miniuart-bt" >>/boot/config.txt
+
 # stop systemd starting a getty on ttyS0:
 systemctl disable serial-getty@ttyS0.service
 perl -pe 's/ console=serial0,115200//' -i /boot/cmdline.txt
