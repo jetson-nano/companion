@@ -22,6 +22,8 @@ apt-get install -y dbus libdbus-glib-1-dev libdbus-1-dev python-dbus redis-tools
 apt-get install avahi-daemon
 
 pushd GitHub/
+rm -rf pywificontrol
+rm -rf systemd-manager
 git clone https://github.com/jmachuca77/pywificontrol.git
 git clone https://github.com/emlid/systemd-manager.git
 
