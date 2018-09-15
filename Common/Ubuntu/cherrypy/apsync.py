@@ -87,6 +87,9 @@ class APSync(object):
             if address.find('0.0.0.0') != -1:
                 # ignore anything broadcast
                 continue
+            if address.find('10.0.1.128') != -1:
+                # ignore anything broadcast
+                continue
             if address.find('.255') != -1:
                 # ignore any broadcast addresses
                 continue
@@ -114,6 +117,9 @@ class APSync(object):
         return True
 
 
+    def is_raspi(self):
+        return os.path.exists("/etc/rpi-issue")
+
     def video_stream_starter_main(self):
         '''Monitor a file in /tmp/ for telemtry traffic (currently written by
         cmavnode), possibly redirect video stream out that way
@@ -122,7 +128,7 @@ class APSync(object):
 #            print("Auto streaming currently disabled")
             time.sleep(1)
 
-        while not self.good_video0():
+        while not self.good_video0() and not self.is_raspi():
             print("Waiting for good video0")
             time.sleep(1)
 

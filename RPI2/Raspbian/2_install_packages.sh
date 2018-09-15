@@ -10,5 +10,7 @@ set -x
 
 . config.env
 
+apt-get install -y python-pip
+
 # install packages common to all
 ../../Common/Ubuntu/install_packages.sh

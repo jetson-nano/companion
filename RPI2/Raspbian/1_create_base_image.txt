@@ -9,7 +9,8 @@
 # Flash image onto SD card per instructions linked from that page
 # on linux this will look something like:
 # NOTE: make sure you use a 4GB card!
-# time (sudo dd status=progress if=2017-08-16-raspbian-stretch-lite.img of=/dev/mmcblk0 && sync)
+# IMG=2017-08-16-raspbian-stretch-lite.img
+# time (sudo dd status=progress if="$IMG" of=/dev/mmcblk0 && sync)
 # (~7 minutes)
 
 # Boot Raspberry Pi.
@@ -21,6 +22,7 @@ sudo systemctl start ssh
 
 # Setup is easier if you can ssh into the vehicle from an existing
 #  desktop environment.  Use the ethernet connection for this.
+ssh pi@raspberrypi.local
 
 # create an apsync user:
 sudo useradd -s /bin/bash -m -U -G sudo,netdev,users,dialout,video apsync
@@ -29,16 +31,20 @@ sudo passwd apsync # apsync
 # at this point logout of "pi"
 
 # authorize your identity on apsync, from your host machine:
-ssh-copy-id apsync@raspberrypi
+ssh-copy-id apsync@raspberrypi.local
 
 # and log back in as "apsync"!
+ssh apsync@raspberrypi.local
 
 # enable the camera:
 sudo raspi-config
 # navigate Interfacing Options -> P1 Camera
-# select yes and confirm, reboot
+# select yes and confirm
+# navigate to keyboard, change to US-layout
+# reboot
 
 # log back in as apsync/apsync
+ssh apsync@raspberrypi.local
 
 # update apt repository metadata
 time sudo apt-get update # 1m
@@ -50,7 +56,9 @@ time sudo apt-get install -y git # 1m30s
 mkdir GitHub
 pushd GitHub
 time git clone https://github.com/ArduPilot/companion
-# usually at this point I rsync over the top of this checkout with the same repo on my laptop
+# usually at this point I rsync over the top of this checkout with the same repo on my laptop:
+# rsync -aP companion/ apsync@raspberrypi.local:GitHub/companion --delete --delete-excluded --exclude=*.img.xz --exclude=*actory.img --exclude mav.tlog --exclude mav.tlog.raw --exclude=*/jetpack_download/* --exclude=*/JetPack*
+
 
 # run the installation scripts:
 pushd companion/RPI2/Raspbian || echo "Failed"
@@ -61,12 +69,13 @@ sudo ./2_setup_uart.sh || echo "Failed"
 time sudo ./2_use_networkmanager.sh || echo "Failed" # ~1m
 sudo reboot # network goes screwy after nm installed
 # log back in again as apsync/apsync
-ssh apsync@apsync
+ssh apsync@apsync.local
 pushd GitHub/companion/RPI2/Raspbian || echo "Failed"
 time sudo ./3_wifi_access_point.sh || echo "Failed" # Failure expected!
+time sudo ./3_wifi_client.sh # instant
 sudo reboot   # reboot required before AP will work
 # log back in again as apsync/apsync
-sudo nmcli connection up WiFiAP #  apparently required first time!
+sudo nmcli connection up WiFiAP #  may be required first time!
 pushd GitHub/companion/RPI2/Raspbian || echo "Failed"
 time sudo ./6_setup_cmavnode.sh || echo "Failed" # ~9m
 time sudo ./7_dflogger.sh || echo "Failed" # 13m
@@ -74,6 +83,7 @@ time sudo ./6_setup_video.sh || echo "Failed"  #31m
 time sudo ./setup_video_streaming || echo "Failed"  # 1m
 time sudo ./8_red_balloon_finder.sh || echo "Failed" # 18s
 time sudo ./5_setup_mavproxy.sh # 2s
+time sudo -E ./setup_mavlink-router # ~2m
 time sudo ./install_pymavlink # new version required for apweb # 3m
 time sudo ./install_apweb # 2m33s
 time sudo ./resize_filesystem_on_next_boot
@@ -84,9 +94,20 @@ popd
 # sudo reboot
 # unplug ethernet
 
+# disable link-local addresses:
+perl -pe 's%(/usr/lib/dhcpcd5/dhcpcd)%$1 --noipv4ll%' -i /etc/systemd/system/dhcpcd.service.d/wait.conf
+# disable dhcpcd
+sudo systemctl disable dhcpcd
+# disable the plugin scanner, which stops video streaming working:
+sudo chmod -x /usr/lib/arm-linux-gnueabihf/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner
+
+# enable client mode to work:
+ # echo "dtoverlay=pi3-disable-bt" >>/boot/config.txt
+
 # test image by following testing.txt
 
 pushd GitHub/companion/RPI2/Raspbian && time sudo ./clean-for-imaging # 11m
+time sudo ./resize_filesystem_on_next_boot
 sudo poweroff
 
 # on a host machine with the SD card from RPi present:
