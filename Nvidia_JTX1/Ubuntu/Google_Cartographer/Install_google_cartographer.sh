@@ -55,5 +55,6 @@ cp cartographer.launch $HOME/GoogleCartographer_ws/src/cartographer_ros/cartogra
 cp cartographer.lua $HOME/GoogleCartographer_ws/src/cartographer_ros/cartographer_ros/configuration_files
 
 cp ArdupilotMavROS.launch $HOME/GoogleCartographer_ws/launch
+EOF
 
 echo "Successfully installed Google Cartographer and Ardupilot Project"
