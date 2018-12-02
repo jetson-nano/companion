@@ -170,6 +170,13 @@ tput setaf 2
 echo "Installing rosinstall tools"
 tput sgr0
 sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential -y
+
+tput setaf2
+echo "Install geographiclib datasets required for MAVROS"
+tput sgr0
+
+sudo /opt/ros/kinetic/lib/mavros/install_geographiclib_datasets.sh
+
 tput setaf 2
 echo "Installation complete!"
 tput sgr0
