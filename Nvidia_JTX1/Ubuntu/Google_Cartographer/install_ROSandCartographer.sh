@@ -11,6 +11,6 @@ set -e
 set -x
 
 time ./installROSTX2.sh -p ros-kinetic-desktop-full
-time ./install_google_cartographer.sh
+time ./Install_google_cartographer.sh
 
 echo "Succesfull install_ROSandCartographer.sh"
