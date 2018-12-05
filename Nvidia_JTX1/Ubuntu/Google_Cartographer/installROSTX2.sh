@@ -143,6 +143,7 @@ sudo apt-get install ros-kinetic-imu-transformer  -y
 sudo apt-get install ros-kinetic-serial -y
 # Install other utilities
 sudo apt-get install ros-kinetic-mavros -y
+sudo apt-get install ros-kinetic-mavros-extras -y
 sudo apt-get install ros-kinetic-rqt -y
 sudo apt-get install ros-kinetic-rqt-common-plugins -y
 sudo apt-get install ros-kinetic-rqt-robot-plugins -y
@@ -169,7 +170,7 @@ source ~/.bashrc
 tput setaf 2
 echo "Installing rosinstall tools"
 tput sgr0
-sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential -y
+sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential python-catkin-tools -y
 
 tput setaf2
 echo "Install geographiclib datasets required for MAVROS"
