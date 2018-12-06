@@ -82,6 +82,16 @@ echo "Adding Ardupilot MAVRos launch file"
 tput sgr0
 
 cp ArdupilotMavROS.launch $HOME/GoogleCartographer_ws/launch
+
+tput setaf 2
+echo "Building Catking Packages"
+tput sgr0
+
+pushd $HOME/GoogleCartographer_ws
+time catkin build
+echo "source /home/apsync/GoogleCartographer_ws/devel/setup.bash" >> ~/.bashrc
+source devel/setup.bash
+
 EOF
 
 tput setaf 2
