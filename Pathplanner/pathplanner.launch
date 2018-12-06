@@ -1,0 +1,13 @@
+<launch>
+
+    <arg name="use_rosbot" default="true"/>
+    <node pkg="move_base" type="move_base" name="move_base" output="screen">
+        <param name="controller_frequency" value="10.0"/>
+        <rosparam file="/home/apsync/GoogleCartographer_ws/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="/home/apsync/GoogleCartographer_ws/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="/home/apsync/GoogleCartographer_ws/config/local_costmap_params.yaml" command="load" />
+        <rosparam file="/home/apsync/GoogleCartographer_ws/config/global_costmap_params.yaml" command="load" />
+        <rosparam file="/home/apsync/GoogleCartographer_ws/config/trajectory_planner.yaml" command="load" />
+    </node>
+
+</launch>
