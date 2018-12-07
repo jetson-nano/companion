@@ -31,7 +31,7 @@ mkdir -p GoogleCartographer_ws/src
 mkdir -p GoogleCartographer_ws/launch
 
 pushd $HOME/GoogleCartographer_ws
-#catkin_init_workspace
+catkin_init_workspace
 
 tput setaf 2
 echo "Cloning packages into workspace src folder"
