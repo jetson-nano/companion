@@ -1,0 +1,86 @@
+<launch>
+    <arg name="use_rosbot" default="true" />
+    <arg name="fcu_url" default="udp://:14551@" />
+    <arg name="gcs_url" default="" />
+    <arg name="tgt_system" default="1" />
+    <arg name="tgt_component" default="1" />
+    <arg name="log_output" default="screen" />
+    <arg name="fcu_protocol" default="v2.0" />
+    <arg name="respawn_mavros" default="false" />
+    <arg name="pluginlists_yaml" default="$(find mavros)/launch/apm_pluginlists.yaml" />
+    <arg name="config_yaml" default="$(find mavros)/launch/apm_config.yaml" />
+    <arg name="rplidar_a3" default="true" />
+
+    <param if="$(arg use_rosbot)" name="use_sim_time" value="false"/>
+    <param name="robot_description" command="$(find xacro)/xacro '$(find r1_description)/urdf/r1_sim.urdf.xacro' --inorder" />
+
+    <node if="$(arg rplidar_a3)" pkg="rplidar_ros" type="rplidarNode" name="rplidar_a3" output="screen">
+        <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>  
+        <param name="serial_baudrate"     type="int"    value="256000"/><!--A3 -->
+        <param name="frame_id"            type="string" value="laser_frame"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+        <param name="scan_mode"           type="string" value="Sensitivity"/>
+    </node>    
+
+    <node unless="$(arg rplidar_a3)"  pkg="rplidar_ros"  type="rplidarNode" name="rplidarNode" output="screen">
+        <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>
+        <param name="serial_baudrate"     type="int"    value="115200"/><!--A1/A2 -->
+        <param name="frame_id"            type="string" value="laser_frame"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+    </node>
+
+    <node name="cartographer_node"
+        pkg="cartographer_ros"
+        type="cartographer_node"
+        args="-configuration_directory $(find cartographer_ros)/configuration_files -configuration_basename cartographer.lua">
+    </node>
+
+    <node name="cartographer_occupancy_grid_node"
+        pkg="cartographer_ros"
+        type="cartographer_occupancy_grid_node">
+    </node>
+
+    <node name="robot_pose_publisher"
+        pkg="robot_pose_publisher"
+        type="robot_pose_publisher"
+        respawn="false"
+        output="screen">
+    </node>
+
+    <node name="joint_state_publisher"
+	    pkg="joint_state_publisher"
+        type="joint_state_publisher">
+    </node>
+
+    <node name="base_to_laser_broadcaster" 
+        pkg="tf" 
+        type="static_transform_publisher" 
+        args="0 0 0 0 0 0 base_link laser_frame 100">
+    </node>
+
+    <node pkg="mavros" type="mavros_node" name="mavros" required="$(eval not respawn_mavros)" clear_params="true" respawn="$(arg respawn_mavros)">
+        <param name="fcu_url" value="$(arg fcu_url)" />
+        <param name="gcs_url" value="$(arg gcs_url)" />
+        <param name="target_system_id" value="$(arg tgt_system)" />
+        <param name="target_component_id" value="$(arg tgt_component)" />
+        <param name="fcu_protocol" value="$(arg fcu_protocol)" />
+
+        <!-- load blacklist, config -->
+        <rosparam command="load" file="$(arg pluginlists_yaml)" />
+        <rosparam command="load" file="$(arg config_yaml)" />
+        <remap from="/mavros/vision_pose/pose" to="/robot_pose" />
+        <remap from="/mavros/setpoint_velocity/cmd_vel_unstamped" to="/cmd_vel" />
+    </node>
+
+    <node pkg="move_base" type="move_base" name="move_base" output="screen">
+        <param name="controller_frequency" value="10.0"/>
+        <rosparam file="/home/apsync/GoogleCartographer_ws/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="/home/apsync/GoogleCartographer_ws/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="/home/apsync/GoogleCartographer_ws/config/local_costmap_params.yaml" command="load" />
+        <rosparam file="/home/apsync/GoogleCartographer_ws/config/global_costmap_params.yaml" command="load" />
+        <rosparam file="/home/apsync/GoogleCartographer_ws/config/trajectory_planner.yaml" command="load" />
+    </node>
+
+</launch>
