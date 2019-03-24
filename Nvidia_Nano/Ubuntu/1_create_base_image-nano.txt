@@ -35,7 +35,7 @@ mkdir GitHub
 pushd GitHub
 git clone https://github.com/ArduPilot/companion.git
 pushd companion/Nvidia_Nano/Ubuntu
-sudo ./set-hostname   # reset the machine's hostname
+#sudo ./set-hostname   # reset the machine's hostname
 sudo apt-get autoremove -y # avoid repeated no-longer-required annoyance
 #sudo ./change-autologin-user.sh
 sudo ./remove-unattended-upgrades # 
@@ -44,7 +44,7 @@ sudo ./ensure_rc_local.sh
 sudo reboot # ensure hostname correct / console disabling OK / autologin working
 TEGRA=apsync.local # on your laptop....
 ssh apsync@$TEGRA
-pushd GitHub/companion/Nvidia_JTX1/Ubuntu
+pushd GitHub/companion/Nvidia_Nano/Ubuntu
 # consider exporting a http proxy:
 # export http_proxy=http://bogg.local:3128/
 time sudo -E ./2_install_packages.sh # 20m
