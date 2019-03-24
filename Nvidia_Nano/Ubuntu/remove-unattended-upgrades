@@ -5,4 +5,4 @@ set -x
 
 . config.env
 
-apt-get remove -y unattended-upgrades
+apt remove -y unattended-upgrades
