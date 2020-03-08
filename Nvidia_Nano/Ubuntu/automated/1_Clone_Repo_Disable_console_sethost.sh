@@ -53,11 +53,11 @@ echo "Installing AP Sync niceties"
 tput sgr0
 time sudo -E ./install_niceties || echo "Failed" # 20s
 
-tput setaf 3
-echo "Installing AP Streamlinke"
-tput sgr0
-time ./apstreamline.sh # 1m  This is optional
-#time ./setup-video-streaming # 11s  This is optional
+# tput setaf 3
+# echo "Installing AP Streamlinke"
+# tput sgr0
+# time ./apstreamline.sh # 1m  This is optional
+# #time ./setup-video-streaming # 11s  This is optional
 
 tput setaf 3
 echo "Installing Mavlink-Router"
