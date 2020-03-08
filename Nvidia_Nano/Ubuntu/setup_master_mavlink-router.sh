@@ -50,7 +50,9 @@ tput setaf 3
 echo "Setting up mavlink-router service"
 tput sgr0
 
-mkdir /etc/mavlink-router
+if [ ! -d "/etc/mavlink-router" ] ; then
+  mkdir /etc/mavlink-router
+fi
 
 cp mavlink-router.conf /etc/mavlink-router/main.conf
 systemctl enable mavlink-router.service
