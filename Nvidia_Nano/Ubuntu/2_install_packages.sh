@@ -14,7 +14,7 @@ tput setaf 3
 echo "Installing Packages"
 tput sgr0
 
-apt remove modemmanager
+apt remove modemmanager -y 
 
 # install packages common to all
 ../../Common/Ubuntu/install_packages.sh
