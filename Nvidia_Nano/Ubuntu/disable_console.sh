@@ -14,6 +14,5 @@ tput setaf 3
 echo "Disabling Serial Console to ttyS0"
 tput sgr0
 
-systemctl mask serial-getty@ttyS0.service
-perl -pe 's/console=ttyAMA0,115200//' -i /boot/config-5.3.0-1017-raspi2
-perl -pe 's/console=ttyAMA0,115200//' -i /boot/config-5.3.0-1018-raspi2
+systemctl disable nvgetty.service
+

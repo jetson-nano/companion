@@ -10,7 +10,7 @@ set -x
 
 . config.env
 
-pushd /home/$NORMAL_USER/GitHub/companion/RPI2/Ubuntu
+pushd /home/$NORMAL_USER/GitHub/companion/Nvidia_Nano/Ubuntu
 time ./install_realsense.sh 
 
 tput setaf 2

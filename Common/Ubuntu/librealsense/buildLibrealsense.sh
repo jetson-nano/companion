@@ -10,7 +10,7 @@ LIBREALSENSE_VERSION=v2.33.1
 INSTALL_DIR=$PWD
 NVCC_PATH=/usr/local/cuda-10.0/bin/nvcc
 
-USE_CUDA=false
+USE_CUDA=true
 s
 function usage
 {

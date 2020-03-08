@@ -16,6 +16,5 @@ tput sgr0
 
 apt remove modemmanager
 
-apt install avahi-daemon -y 
 # install packages common to all
 ../../Common/Ubuntu/install_packages.sh

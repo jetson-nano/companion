@@ -10,15 +10,11 @@ set -x
 
 . config.env
 
-tput setaf 3
-echo "Setting up access point using wifi-ap snap"
-tput sgr0
+# the hardware must be told to go into AP mode:
+# echo "options bcmdhd op_mode=2" | tee -a /etc/modprobe.d/bcmdhd.conf
+# echo 2 >/sys/module/bcmdhd/parameters/op_mode
 
-# time snap install network-manager
-time snap install wifi-ap
-wifi-ap.config set wifi.ssid=ardupilot
-wifi-ap.config set wifi.security-passphrase=ardupilot
-wifi-ap.config set wifi.address=10.0.1.128
-wifi-ap.config set dhcp.range-start=10.0.1.129
-wifi-ap.config set dhcp.range-stop=10.0.1.138
-
+# most of this is common:
+pushd ../../Common/Ubuntu
+./3_wifi_access_point.sh
+popd

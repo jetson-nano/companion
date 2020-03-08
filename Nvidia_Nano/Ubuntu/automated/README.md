@@ -1,1 +1,1 @@
-# apsync-rpi
+# apsync-nano
