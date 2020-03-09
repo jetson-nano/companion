@@ -16,5 +16,8 @@ tput sgr0
 
 apt remove modemmanager -y 
 
+# install Jetson-stats package run with 'sudo jtop'
+pip install jetson-stats
+
 # install packages common to all
 ../../Common/Ubuntu/install_packages.sh
