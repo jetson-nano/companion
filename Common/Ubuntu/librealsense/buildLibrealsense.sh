@@ -11,7 +11,7 @@ INSTALL_DIR=$PWD
 NVCC_PATH=/usr/local/cuda-10.0/bin/nvcc
 
 USE_CUDA=true
-s
+
 function usage
 {
     echo "usage: ./buildLibrealsense.sh [[-c ] | [-h]]"
