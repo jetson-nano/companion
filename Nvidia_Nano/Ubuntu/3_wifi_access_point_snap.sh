@@ -17,7 +17,7 @@ tput sgr0
 # time snap install network-manager
 time snap install wifi-ap
 sleep 2
-wifi-ap.config set wifi.ssid=ardupilot
+wifi-ap.config set wifi.ssid=ArduPilot
 wifi-ap.config set wifi.security-passphrase=ardupilot
 wifi-ap.config set wifi.address=10.0.1.128
 wifi-ap.config set dhcp.range-start=10.0.1.129
